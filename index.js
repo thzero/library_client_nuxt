@@ -1,22 +1,18 @@
-// Plugins
-// import vue from '@vitejs/plugin-vue'
-// import { splitVendorChunkPlugin } from 'vite'
-
-// Utilities
-// import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
 import fs from 'fs';
 import path from 'path';
 
 class library {
-    init() {
+    init(rootDirName) {
+      console.log('root.dir.name', rootDirName);
+
       this.configEnv = process.env.NODE_ENV;
       console.log('vue.config.NODE_ENV', this.configEnv);
       const config = process.env._CONFIG;
       console.log('vue.config._CONFIG', config);
       if (config) {
-        const filename = path.join(__dirname, `./src/config/${this.configEnv}.json`);
+        const filename = path.join(rootDirName, `./src/config/${this.configEnv}.json`);
         console.log('vue.config.filename', filename);
         fs.writeFileSync(filename, config);
         const contents = fs.readFileSync(filename, 'utf8');
@@ -26,7 +22,7 @@ class library {
         this.configEnv = 'development';
       console.log('vue.config._CONFIG_ENV', this.configEnv);
       
-      const dir = path.join(__dirname, 'node_modules', '@thzero');
+      const dir = path.join(rootDirName, 'node_modules', '@thzero');
       const dirs = fs.readdirSync(dir);
       
       console.log('\tOpenSource...');
@@ -55,7 +51,7 @@ class library {
       
       try {
         const openSourceJs = `/* eslint-disable */\n/* GENERATED FILE - DO NOT EDIT */\nexport function useDependenciesClientBase () { return [ ${items.join(`, `)} ]; }`;
-        fs.writeFileSync(path.join(__dirname, 'openSource.js'), openSourceJs);
+        fs.writeFileSync(path.join(rootDirName, 'openSource.js'), openSourceJs);
       } catch (err) {
         console.log(err);
       }
